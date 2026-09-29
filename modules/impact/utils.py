@@ -48,13 +48,14 @@ def tensor_convert_rgb(image, prefer_copy=True):
     """Assumes NHWC format tensor with 1, 3 or 4 channels."""
     _tensor_check_image(image)
     n_channel = image.shape[-1]
+
     if n_channel == 3:
         return image
 
     if n_channel == 4:
         image = image[..., :3]
         if prefer_copy:
-            image = image.copy()
+            image = image.clone()
         return image
 
     if n_channel == 1:
@@ -64,7 +65,6 @@ def tensor_convert_rgb(image, prefer_copy=True):
             image = image.expand(1, -1, -1, 3)
         return image
 
-    # NOTE: Same error message as in PIL, for easier googling :P
     raise ValueError(f"illegal conversion (channels: {n_channel} -> 3)")
 
 
